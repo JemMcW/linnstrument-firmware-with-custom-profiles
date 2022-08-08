@@ -7,6 +7,9 @@ This file defines what notes are used for each profile and gives some examples o
 your own.
 **************************************************************************************************/
 
+#ifndef H_PROFILES_H
+#define H_PROFILES_H
+
 static constexpr int NumProfiles = 15;
 static constexpr int Rows = 8;
 static constexpr int Columns = 16;
@@ -200,3 +203,5 @@ byte Profile15(byte row, byte col)
 {
   return 15;
 }
+
+#endif // H_PROFILES_H

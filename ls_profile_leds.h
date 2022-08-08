@@ -6,13 +6,15 @@ or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
 This file defines what led colours are used for each profile
 **************************************************************************************************/
 
+#ifndef H_LED_PROFILES_H
+#define H_LED_PROFILES_H
 
-
+#include "ls_profiles.h"
+// the constants below are included from the file above
 // static constexpr int NumProfiles = 15;
 // static constexpr int Rows = 8;
 // static constexpr int Columns = 16;
 
-#include "ls_profiles.h"
 
 short ProfileLed1(short displayedNote);
 short ProfileLed2(short displayedNote);
@@ -134,3 +136,5 @@ short ProfileLed15(short displayedNote)
 {
     return ProfileLed1(displayedNote);
 }
+
+#endif
