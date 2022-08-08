@@ -6,6 +6,7 @@ or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
 These routines handle the processing of new touch events, continuous updates of touch events and
 released touch events
 **************************************************************************************************/
+#include "ls_profiles.h"
 
 void cellTouched(TouchState state) {
   cellTouched(sensorCol, sensorRow, state);
@@ -1917,7 +1918,6 @@ inline void updateSensorCell() {
   sensorCell->shouldRefreshData();
 }
 
-
 // getNoteNumber:
 // computes MIDI note number from current row, column, row offset, octave button and transposition amount
 byte getNoteNumber(byte split, byte col, byte row) {
@@ -1925,9 +1925,11 @@ byte getNoteNumber(byte split, byte col, byte row) {
 
   // return the computed note based on the selected rowOffset
   short noteCol = col;
-  if (isLeftHandedSplit(split)) {
+  if (isLeftHandedSplit(split))
     noteCol = (NUMCOLS - col);
-  }
+
+  if (Split[split].profile != 1)
+    return profiles[Split[split].profile](row, col);
 
   notenum = determineRowOffsetNote(split, row) + noteCol - 1;
 

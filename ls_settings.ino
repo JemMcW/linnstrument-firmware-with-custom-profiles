@@ -2279,7 +2279,12 @@ void handleOctaveTransposeNewTouch() {
 }
 
 void handleOctaveTransposeNewTouchSplit(byte side) {
-  if (sensorRow == OCTAVE_ROW) {
+  if (sensorRow == VOLUME_ROW) {
+    if (sensorCol > 0 && sensorCol < 16) {
+      Split[side].profile = sensorCol - 1;
+    }
+  }
+  else if (sensorRow == OCTAVE_ROW) {
     switch (sensorCol) {
       case 3: Split[side].transposeOctave = -60; break;
       case 4: Split[side].transposeOctave = -48; break;
@@ -2293,7 +2298,6 @@ void handleOctaveTransposeNewTouchSplit(byte side) {
       case 12: Split[side].transposeOctave = 48; break;
       case 13: Split[side].transposeOctave = 60; break;
     }
-
   }
   else if (sensorRow == SWITCH_1_ROW) {
     if (sensorCol > 0 && sensorCol < 16) {

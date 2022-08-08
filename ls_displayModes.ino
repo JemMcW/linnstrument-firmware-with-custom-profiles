@@ -54,7 +54,6 @@ displayCustomLedsEditor       : editor for custom LEDs
 These routines handle the painting of these display modes on LinnStument's 208 LEDs.
 **************************************************************************************************/
 
-
 unsigned long displayModeStart = 0;    // indicates when the current display mode was activated
 boolean blinkMiddleRootNote = false;   // indicates whether the middle root note should be blinking
 
@@ -415,6 +414,11 @@ void paintNormalDisplaySplit(byte split, byte leftEdge, byte rightEdge) {
         paintStrumDisplayCell(split, col, row);
       }
     }
+    else if (Split[split].profile != 0) {
+      for (byte col = leftEdge; col < rightEdge; ++col) {
+        paintProfileDisplayCell(split, col, row);
+      }
+    }
     else {
       for (byte col = leftEdge; col < rightEdge; ++col) {
         paintNormalDisplayCell(split, col, row);
@@ -487,6 +491,23 @@ void paintStrumDisplayCell(byte split, byte col, byte row) {
 
   // actually set the cell's color
   setLed(col, row, colour, cellDisplay);
+}
+
+#include "ls_profile_leds.h"
+void paintProfileDisplayCell(byte split, byte col, byte row)
+{
+  if (userFirmwareActive) return;
+
+  // by default clear the cell color
+  byte colour = COLOR_OFF;
+  CellDisplay cellDisplay = cellOn;
+
+  short displayedNote = getNoteNumber(split, col, row) + Split[split].transposeOctave;
+  short actualnote = transposedNote(split, col, row);
+
+  colour = profile_led[Split[split].profile](displayedNote);
+
+  setLed(col, row, colour, cellDisplay, LED_LAYER_MAIN);
 }
 
 void paintNormalDisplayCell(byte split, byte col, byte row) {
@@ -1364,6 +1385,15 @@ void paintOctaveTransposeDisplay(byte side) {
   clearDisplay();
   blinkMiddleRootNote = true;
 
+    // Paint the note profile
+  if (!doublePerSplit || Split[LEFT].profile == Split[RIGHT].profile) {
+    paintProfile(Split[Global.currentPerSplit].colorMain, VOLUME_ROW, Split[side].profile);
+  }
+  else if (doublePerSplit) {
+      paintProfile(Split[LEFT].colorMain, VOLUME_ROW, Split[LEFT].profile);
+      paintProfile(Split[RIGHT].colorMain, VOLUME_ROW, Split[RIGHT].profile);
+  }
+
   // Paint the octave shift value
   if (!doublePerSplit || Split[LEFT].transposeOctave == Split[RIGHT].transposeOctave) {
     paintOctave(Split[Global.currentPerSplit].colorMain, 8, OCTAVE_ROW, Split[side].transposeOctave);
@@ -1462,6 +1492,15 @@ void paintTranspose(byte color, byte row, short transpose) {
     for (byte c = col_from; c <= col_to; ++c) {
       setLed(c, row, color, cellOn);
     }
+  }
+}
+
+void paintProfile(byte color, byte row, short profile) {
+  byte col = 1;
+  setLed(col, row, Split[Global.currentPerSplit].colorAccent, cellOn);
+
+  if (profile != 0) {
+      setLed(col + profile, row, color, cellOn);
   }
 }
 

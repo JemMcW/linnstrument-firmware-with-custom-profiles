@@ -670,6 +670,7 @@ struct SplitSettings {
   signed char transposeOctave;            // -60, -48, -36, -24, -12, 0, +12, +24, +36, +48, +60
   signed char transposePitch;             // transpose output midi notes. Range is -12 to +12
   signed char transposeLights;            // transpose lights on display. Range is -12 to +12
+  unsigned char profile;                  // Note profile to play the correct notes
   boolean ccFaders;                       // true to activated 8 CC faders for this split, false for regular music performance
   boolean arpeggiator;                    // true when the arpeggiator is on, false if notes should be played directly
   boolean strum;                          // true when this split strums the touches of the other split
