@@ -505,7 +505,7 @@ void paintProfileDisplayCell(byte split, byte col, byte row)
   short displayedNote = getNoteNumber(split, col, row) + Split[split].transposeOctave;
   short actualnote = transposedNote(split, col, row);
 
-  colour = profile_led[Split[split].profile](displayedNote);
+  colour = profile_led[Split[split].profile-1](displayedNote);
 
   setLed(col, row, colour, cellDisplay, LED_LAYER_MAIN);
 }

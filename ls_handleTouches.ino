@@ -1928,8 +1928,8 @@ byte getNoteNumber(byte split, byte col, byte row) {
   if (isLeftHandedSplit(split))
     noteCol = (NUMCOLS - col);
 
-  if (Split[split].profile != 1)
-    return profiles[Split[split].profile](row, col);
+  if (Split[split].profile != 0)
+    return profiles[Split[split].profile - 1](row, col);
 
   notenum = determineRowOffsetNote(split, row) + noteCol - 1;
 
